@@ -26,23 +26,36 @@ namespace SecretAppa
             {
                 if (choice == 1)
                 {
+                    Console.Clear();
+                    Console.WriteLine("Login \n");
                     LoggIn();
+             
                 }
                 else if (choice == 2)
                 {
-                    AddUser();
+                        Console.Clear();
+                        Console.WriteLine("Lägg till användaren: \n");
+                        AddUser();
+                        Menu();
                 }
                 else if (choice == 3)
                 {
-                    ChangePassword();
+                        Console.Clear();
+                        Console.WriteLine("Byta lösenord: ");
+                        ChangePassword();
+
                 }
                 else if (choice == 4)
                 {
-                    ShowUsers();
+                        Console.Clear();
+                        Console.WriteLine("Användare \n");
+                        ShowUsers();
                 }
                 else if (choice == 5)
                 {
-                  DeleteUser();
+                        Console.Clear();
+                        Console.WriteLine("Ta bort användare \n");
+                        DeleteUser();
                 }
 
                 else if (choice == 9)
@@ -70,9 +83,9 @@ namespace SecretAppa
             string[] tempPasswordList = new string[userPasswordsList.Length + 1];
 
             Console.Write("Skriv namnet på den du vill du lägga till: ");
-            string name = Console.ReadLine();
+            string? name = Console.ReadLine();
             Console.Write ("Valj ett lösenord: ");
-            string password = Console.ReadLine();
+            string? password = Console.ReadLine();
             
 
             int i = 0;
@@ -115,9 +128,11 @@ namespace SecretAppa
         int i = 0;
         while (i < userNamesList.Length)
         {
-            Console.WriteLine(userNamesList[i].ToUpper() + " " .userPasswordsList[i]);
+            Console.WriteLine(userNamesList[i].ToUpper() + " " +  userPasswordsList[i]);
             i++;
         }
+
+            Menu();
     }
 
     static void LoggIn()
@@ -157,8 +172,36 @@ namespace SecretAppa
 
     static void ChangePassword()
     {
-        Console.WriteLine("Hello from ChangePassword()");
-    }
+            {
+                Console.WriteLine("Byt lösenordet");
+                Console.Write("Anvädarnam: ");
+                string name = Console.ReadLine();
+
+                int hit = Array.IndexOf(userNamesList, name);
+
+                if (hit == -1)
+                {
+                    Console.WriteLine("Användaren finns inte");
+                    return;
+                }
+
+                else
+                {
+
+                    Console.WriteLine("Nuvarande lösenord");
+                    string oldpassword = Console.ReadLine();
+
+                    if (userPasswordsList[hit] == oldpassword) ;
+                    {
+                        Console.WriteLine("Nytt lösenord");
+                        userPasswordsList[hit] = Console.ReadLine();
+                    }
+
+                }
+                Menu() ;
+
+            }
+        }
 
     static void DeleteUser()
         {
@@ -193,20 +236,39 @@ namespace SecretAppa
             }
             userNamesList = tempNameList;
 
+            i = 0; 
+            j = 0;
+
+            while(i<userPasswordsList.Length)
+            {
+                if(hit == i)
+                {
+                    i++;  
+                    continue;
+                }
+                tempPasswordList[j] = userPasswordsList[i];
+                i++;
+                j++;
+            }
+            userPasswordsList = tempPasswordList;
+            Menu();
         }
+
    
 
 
         static void Menu()
         {
             Console.WriteLine("" +
-                "1. Logga in\r\n" +
-                "2. Lägg till användare\r\n" +
-                "3. Ändra lösenord\r\n" +
-                "4. Vissa användar Lista\r\n" +
-                "5. Ta bort namn ur listan\r\n" +
-                "9. Visa menyn\r\n" +
-                "0. Avsluta\n");
+                "\n\n* * * * * * * * * * * \n" +
+                    "1. Logga in\r\n" +
+                    "2. Lägg till användare\r\n" +
+                    "3. Ändra lösenord\r\n" +
+                    "4. Vissa användar Lista\r\n" +
+                    "5. Ta bort en användare \r\n" +
+                    "9. Visa menyn\r\n" +
+                    "0. Avsluta\r\n" +
+                    "* * * * * * * * * * * \n\n");
 
         }
 
