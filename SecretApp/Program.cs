@@ -9,8 +9,10 @@ namespace SecretAppa
 {
     static string[] userNamesList = { "Pelle", "Stina", "Ali" };
     static string[] userPasswordsList = { "1234", "12345", "12346"};
+    static bool userLoggedIn = false;
+    static string loggedInUser = "";
 
-    static void Main(string[] args)
+        static void Main(string[] args)
     {
         Console.WriteLine("Välkommen");
 
@@ -57,8 +59,14 @@ namespace SecretAppa
                         Console.WriteLine("Ta bort användare \n");
                         DeleteUser();
                 }
+                    else if (choice == 6)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Log Out\n");
+                        LogOut();
+                    }
 
-                else if (choice == 9)
+                    else if (choice == 9)
                     {
                         Menu();
                     }
@@ -115,12 +123,7 @@ namespace SecretAppa
                 Console.WriteLine(post);
             }
             
-            foreach (var post in userPasswordsList)
-            {
-                Console.WriteLine(post);
-            }
-            
-
+        
     }
 
     static void ShowUsers()
@@ -128,7 +131,7 @@ namespace SecretAppa
         int i = 0;
         while (i < userNamesList.Length)
         {
-            Console.WriteLine(userNamesList[i].ToUpper() + " " +  userPasswordsList[i]);
+            Console.WriteLine(userNamesList[i].ToUpper());
             i++;
         }
 
@@ -151,6 +154,8 @@ namespace SecretAppa
                     if (userPasswordsList[i] == password)
                     {
                         Console.WriteLine("Välkommen " + name);
+                        userLoggedIn = true;
+                        loggedInUser = name;  
                         break; 
                     }
                     else
@@ -173,15 +178,23 @@ namespace SecretAppa
     static void ChangePassword()
     {
             {
+                if (!userLoggedIn)
+                {
+                    Console.WriteLine("Du måste vara inloggad");
+                    Menu();
+                    return;
+                }
                 Console.WriteLine("Byt lösenordet");
                 Console.Write("Anvädarnam: ");
                 string name = Console.ReadLine();
 
                 int hit = Array.IndexOf(userNamesList, name);
 
+
                 if (hit == -1)
                 {
                     Console.WriteLine("Användaren finns inte");
+                    Menu();
                     return;
                 }
 
@@ -189,14 +202,11 @@ namespace SecretAppa
                 {
 
                     Console.WriteLine("Nuvarande lösenord");
-                    string oldpassword = Console.ReadLine();
+                    string newPassword = Console.ReadLine();
 
-                    if (userPasswordsList[hit] == oldpassword) ;
-                    {
-                        Console.WriteLine("Nytt lösenord");
-                        userPasswordsList[hit] = Console.ReadLine();
-                    }
-
+                    int index = Array.IndexOf(userNamesList,loggedInUser);
+                    userPasswordsList[index] = newPassword;
+                    Console.WriteLine("Felaktigt nuvarande lösenord ");
                 }
                 Menu() ;
 
@@ -208,7 +218,12 @@ namespace SecretAppa
             string[] tempNameList = new string[userNamesList.Length - 1];
             string[] tempPasswordList = new string[userPasswordsList.Length - 1];
 
-
+            if (!userLoggedIn)
+            {
+                Console.WriteLine("Du måste vara inloggad ");
+                Menu();
+                return;
+            }
             Console.Write("Skriv namnet på den du vill ta bort: ");
             string name = Console.ReadLine();
 
@@ -217,8 +232,11 @@ namespace SecretAppa
             if (hit == -1)
             {
                 Console.WriteLine("namnet finns inte i listan.");
+                Menu();
                 return;
             }
+
+
 
             int i = 0;
             int j = 0;
@@ -230,7 +248,9 @@ namespace SecretAppa
                     i++;
                     continue;
                 }
-               tempNameList[j] = userNamesList[i];
+               
+
+                    tempNameList[j] = userNamesList[i];
                 i++;
                 j++;
             }
@@ -251,9 +271,29 @@ namespace SecretAppa
                 j++;
             }
             userPasswordsList = tempPasswordList;
+
+            if (name == loggedInUser)
+            {
+                LogOut();
+            }
             Menu();
         }
 
+
+    static void LogOut()
+{
+    if (userLoggedIn)
+    {
+        Console.WriteLine("Du loggas ut.");
+        userLoggedIn = false;
+        loggedInUser = "";
+    }
+    else
+    {
+        Console.WriteLine("Ingen är inloggad.");
+    }
+            Menu();
+}
    
 
 
@@ -266,6 +306,7 @@ namespace SecretAppa
                     "3. Ändra lösenord\r\n" +
                     "4. Vissa användar Lista\r\n" +
                     "5. Ta bort en användare \r\n" +
+                    "6. Log out \r\n" +
                     "9. Visa menyn\r\n" +
                     "0. Avsluta\r\n" +
                     "* * * * * * * * * * * \n\n");
